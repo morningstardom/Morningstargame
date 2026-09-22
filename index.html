@@ -1,0 +1,1108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#14213D">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Morningstar Print Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Nunito:wght@600;700;800;900&display=swap">
+<style>
+:root{
+  --navy:#14213D; --navy2:#22345F; --navy3:#31477A;
+  --gold:#F6B42C; --gold2:#FFD66B;
+  --red:#E4453A; --cyan:#1FA6B8; --violet:#8A5CC7;
+  --paper:#FBF8F0; --paper2:#F1ECDF; --ink:#172036; --muted:#5B6479;
+  --concrete:#C9CCC4; --concrete2:#BCC0B7;
+  --ok:#2FA36B; --warn:#EE9B1C; --bad:#D7263D;
+  --display:"Bungee","Arial Black",Impact,system-ui,sans-serif;
+  --body:"Nunito",ui-rounded,"Segoe UI",system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--navy);color:var(--ink);font-family:var(--body);font-weight:700;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;overflow:hidden;user-select:none;-webkit-user-select:none}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible{outline:3px solid var(--gold2);outline-offset:2px}
+#app{height:100%;display:flex;flex-direction:column;max-width:560px;margin:0 auto;position:relative}
+.scr{flex:1;min-height:0;display:flex;flex-direction:column}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- title ---------- */
+#scr-title,#scr-end,#scr-shop{overflow-y:auto;color:var(--paper);padding:16px 16px 28px;gap:16px;
+  background:radial-gradient(120% 60% at 50% 0%, var(--navy3) 0%, var(--navy) 60%)}
+.logo{display:flex;align-items:center;gap:12px;padding-top:8px}
+.logo svg{flex:none}
+.logo h1{font-family:var(--display);font-weight:400;font-size:clamp(26px,8vw,38px);line-height:.95;margin:0;letter-spacing:.5px;color:var(--paper)}
+.logo h1 span{display:block;color:var(--gold);font-size:.62em;letter-spacing:3px;margin-top:4px}
+.tag{margin:0;color:#B9C3DD;font-size:15px}
+.label{font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold2);margin:0 0 8px;font-weight:900}
+.crew-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.crew{background:var(--navy2);border-radius:12px;padding:6px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:2px;border:2px solid transparent;font-size:12px;color:var(--paper)}
+.crew svg{width:44px;height:52px}
+.crew.sel{border-color:var(--gold);background:var(--navy3)}
+.crew small{font-size:10px;color:#9FAAC6;font-weight:700;text-align:center;line-height:1.1}
+.who{background:var(--paper);color:var(--ink);border-radius:16px;padding:14px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center}
+.who svg{width:72px;height:84px;grid-row:span 3}
+.who h2{margin:0;font-family:var(--display);font-weight:400;font-size:20px}
+.who .role{font-size:13px;color:var(--muted)}
+.who .perk{font-size:13px;color:var(--ink)}
+.who .perk b{color:var(--red)}
+.looks{grid-column:1/-1;display:flex;flex-direction:column;gap:8px;margin-top:8px;border-top:1px dashed #d9d2bf;padding-top:10px}
+.looks .row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.looks .row span{font-size:12px;color:var(--muted);width:44px}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #cfc7b2}
+.sw.sel{box-shadow:0 0 0 3px var(--navy)}
+.chipb{font-size:12px;padding:4px 9px;border-radius:99px;background:var(--paper2);border:1px solid #d9d2bf}
+.chipb.sel{background:var(--navy);color:var(--paper);border-color:var(--navy)}
+.cta{background:var(--gold);color:var(--navy);font-family:var(--display);font-size:20px;padding:16px;border-radius:14px;box-shadow:0 5px 0 #B9801A;letter-spacing:.5px}
+.cta:active{transform:translateY(3px);box-shadow:0 2px 0 #B9801A}
+.sec{background:var(--navy2);color:var(--paper);padding:12px;border-radius:12px;font-size:15px}
+.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bank{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:#B9C3DD}
+.bank b{font-family:var(--display);font-weight:400;color:var(--gold2);font-size:20px}
+
+/* peers */
+.peers{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.peers::-webkit-scrollbar{display:none}
+.peer{flex:none;display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.1);border-radius:99px;padding:2px 10px 2px 2px;font-size:12px;color:var(--paper)}
+.peer svg{width:22px;height:26px;background:var(--navy3);border-radius:50%}
+.peer .dot{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+
+/* leaderboard */
+.board{display:flex;flex-direction:column;gap:6px}
+.brow{display:grid;grid-template-columns:24px 30px 1fr auto;gap:8px;align-items:center;background:var(--navy2);border-radius:10px;padding:6px 10px;font-size:14px}
+.brow.me{outline:2px solid var(--gold)}
+.brow .rk{font-family:var(--display);color:var(--gold2);font-weight:400}
+.brow svg{width:28px;height:32px}
+.brow small{display:block;color:#9FAAC6;font-size:11px}
+.brow .amt{font-family:var(--display);font-weight:400;font-size:15px}
+.empty{color:#9FAAC6;font-size:14px;margin:0}
+
+/* ---------- game ---------- */
+#scr-game{background:var(--concrete)}
+.hud{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--navy);color:var(--paper)}
+.clock{font-family:var(--display);font-size:16px;line-height:1}
+.clock small{display:block;font-family:var(--body);font-size:11px;color:var(--gold2);letter-spacing:1px}
+.goal{flex:1;min-width:0}
+.goal .gl{display:flex;justify-content:space-between;font-size:12px;color:#B9C3DD}
+.goal .gl b{font-family:var(--display);font-weight:400;color:var(--paper);font-size:15px}
+.gbar{height:8px;background:var(--navy3);border-radius:99px;overflow:hidden;margin-top:3px}
+.gbar i{display:block;height:100%;width:0;background:var(--gold);border-radius:99px;transition:width .3s}
+.icon-btn{width:38px;height:38px;border-radius:10px;background:var(--navy2);display:grid;place-items:center;flex:none}
+#g-peers{background:var(--navy);padding:0 12px 6px}
+.rail{display:flex;gap:8px;overflow-x:auto;padding:8px 12px;background:var(--navy2);min-height:104px;scrollbar-width:none;align-items:stretch}
+.rail::-webkit-scrollbar{display:none}
+.rail .none{color:#9FAAC6;font-size:13px;align-self:center}
+.tk{flex:none;width:142px;background:var(--paper);border-radius:10px;padding:7px 8px 8px;display:flex;flex-direction:column;gap:3px;text-align:left;position:relative;border-top:5px solid var(--red)}
+.tk.m-emb{border-top-color:var(--violet)} .tk.m-heat{border-top-color:var(--cyan)}
+.tk-top{display:flex;justify-content:space-between;gap:4px;align-items:baseline}
+.tk-top b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mchip{font-size:10px;font-weight:900;padding:1px 5px;border-radius:4px;color:#fff;background:var(--red);flex:none}
+.m-emb .mchip{background:var(--violet)} .m-heat .mchip{background:var(--cyan)}
+.tk-g{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tk-steps{display:flex;gap:3px;margin-top:1px}
+.tk-steps i{flex:1;height:5px;border-radius:2px;background:#DED8C8}
+.tk-steps i.d{background:var(--ink)} .tk-steps i.c{background:var(--gold)}
+.tk-st{font-size:11px;font-weight:900;color:var(--ink)}
+.tk-st.hot{color:var(--ok)} .tk-st.burn{color:var(--bad)}
+.pat{height:6px;border-radius:99px;background:#E6E0D1;overflow:hidden}
+.pat i{display:block;height:100%;border-radius:99px}
+.tk .val{font-size:11px;color:var(--muted)}
+
+.floor{flex:1;min-height:0;position:relative;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:8px;padding:10px 10px 12px;
+  background-color:var(--concrete);
+  background-image:linear-gradient(var(--concrete2) 1px,transparent 1px),linear-gradient(90deg,var(--concrete2) 1px,transparent 1px);
+  background-size:48px 48px}
+.st{position:relative;background:var(--paper);border-radius:12px;display:flex;flex-direction:column;align-items:stretch;padding:6px 6px 7px;min-height:0;overflow:hidden;box-shadow:0 3px 0 #9EA298;text-align:center;gap:2px;border:2px solid transparent}
+.st:active{transform:translateY(2px);box-shadow:0 1px 0 #9EA298}
+.st.hint{border-color:var(--gold);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{border-color:rgba(246,180,44,.25)}}
+.st-art{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.st-art svg{width:100%;height:100%;max-height:54px}
+.st-name{font-size:12px;font-weight:900;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st-info{min-height:22px;display:flex;flex-direction:column;justify-content:center;gap:3px;font-size:10.5px;color:var(--muted);line-height:1.15}
+.wchip{align-self:center;background:var(--navy);color:var(--paper);border-radius:99px;padding:1px 8px;font-size:10.5px;font-weight:900}
+.pbar{height:7px;background:#E3DDCC;border-radius:99px;overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--navy);border-radius:99px}
+.pbar.h i{background:var(--violet)}
+.slots{display:flex;gap:3px}
+.slot{flex:1;height:14px;border-radius:4px;border:1.5px dashed #B9B29F;position:relative;overflow:hidden;font-size:8.5px;font-weight:900;color:#fff;display:grid;place-items:center}
+.slot.f{border:0;background:#DAD3C1}
+.slot.f i{position:absolute;left:0;top:0;bottom:0;background:var(--warn)}
+.slot.f span{position:relative}
+.slot.r{background:var(--ok);animation:blink .6s steps(2) infinite}
+.slot.x{background:var(--bad)}
+@keyframes blink{50%{background:#5BC88F}}
+.qn{position:absolute;top:4px;left:4px;display:flex;gap:2px}
+.qn b{min-width:17px;height:17px;border-radius:50%;background:var(--gold);color:var(--navy);font-size:10px;display:grid;place-items:center;font-weight:900}
+.avatar{position:absolute;left:0;top:0;width:44px;height:58px;pointer-events:none;z-index:5;will-change:transform}
+.avatar svg{width:44px;height:52px;display:block;filter:drop-shadow(0 3px 0 rgba(0,0,0,.18))}
+.avatar .nt{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:9px;font-weight:900;padding:0 5px;border-radius:4px;white-space:nowrap}
+.avatar.walk svg{animation:bob .28s ease-in-out infinite alternate}
+@keyframes bob{to{transform:translateY(-3px)}}
+.helper{position:absolute;left:0;top:0;width:30px;height:38px;z-index:4;pointer-events:none;transition:transform .45s ease}
+.helper svg{width:30px;height:35px;display:block}
+.helper .nt{position:absolute;bottom:-3px;left:50%;transform:translateX(-50%);background:var(--navy);color:var(--paper);font-size:8px;padding:0 4px;border-radius:3px;white-space:nowrap}
+.fx{position:absolute;z-index:8;pointer-events:none;font-weight:900;font-size:14px;white-space:nowrap;transform:translate(-50%,0);animation:rise 1.3s ease-out forwards;text-shadow:0 1px 0 #fff,0 0 6px #fff}
+.fx.money{font-family:var(--display);font-weight:400;font-size:18px;color:var(--ok)}
+.fx.bad{color:var(--bad)} .fx.meh{color:var(--muted);font-size:12px}
+@keyframes rise{from{opacity:1;margin-top:0}to{opacity:0;margin-top:-46px}}
+
+.bottom{background:var(--navy);color:var(--paper);padding:8px 12px calc(10px + env(safe-area-inset-bottom,0px));min-height:66px;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.hintline{font-size:13px;line-height:1.3;color:#DCE2F2}
+.hintline b{color:var(--gold2)}
+.mini{display:flex;gap:10px;align-items:center}
+.mbar{flex:1;height:26px;border-radius:8px;background:var(--navy3);position:relative;overflow:hidden}
+.mzone{position:absolute;top:0;bottom:0;background:rgba(47,163,107,.85)}
+.mzone.pf{background:rgba(255,214,107,.95)}
+.mmark{position:absolute;top:-2px;bottom:-2px;width:5px;margin-left:-2px;background:#fff;border-radius:3px;box-shadow:0 0 0 2px var(--navy)}
+.mbtn{background:var(--red);color:#fff;font-family:var(--display);font-size:14px;padding:10px 12px;border-radius:10px;box-shadow:0 4px 0 #9E2A22;flex:none}
+.mbtn:active{transform:translateY(2px);box-shadow:0 2px 0 #9E2A22}
+.mlabel{font-size:11px;color:#B9C3DD}
+
+.modal{position:absolute;inset:0;background:rgba(10,16,32,.72);display:grid;place-items:center;z-index:20;padding:0 16px}
+.card{background:var(--paper);color:var(--ink);border-radius:18px;padding:18px;width:100%;max-width:360px;display:flex;flex-direction:column;gap:10px}
+.card h2{font-family:var(--display);font-weight:400;margin:0;font-size:22px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.ghost{background:var(--paper2);color:var(--ink);padding:13px;border-radius:12px;font-weight:900;border:1px solid #DDD5C1}
+.sec.ghost2{background:transparent;border:2px solid var(--navy3);font-weight:900}
+
+/* end */
+.stars{display:flex;gap:8px;justify-content:center}
+.stars svg{width:52px;height:52px}
+.sum{background:var(--paper);color:var(--ink);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.sum h2{font-family:var(--display);font-weight:400;margin:0;font-size:24px;text-align:center}
+.big{font-family:var(--display);font-weight:400;font-size:34px;text-align:center;color:var(--navy)}
+.big small{display:block;font-family:var(--body);font-weight:800;font-size:13px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:14px}
+.stats div{display:flex;justify-content:space-between;border-bottom:1px dashed #DDD5C1;padding-bottom:4px}
+.note{font-size:13px;color:var(--muted);text-align:center;margin:0}
+
+/* shop */
+.tabs{display:flex;gap:6px;background:var(--navy2);padding:4px;border-radius:12px}
+.tabs button{flex:1;padding:9px;border-radius:9px;font-weight:900;color:#B9C3DD}
+.tabs button.sel{background:var(--paper);color:var(--navy)}
+.items{display:flex;flex-direction:column;gap:8px}
+.item{background:var(--paper);color:var(--ink);border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+.item svg{width:40px;height:46px}
+.item .ic{width:40px;height:40px;border-radius:10px;background:var(--paper2);display:grid;place-items:center}
+.item h3{margin:0;font-size:14px;font-weight:900}
+.item p{margin:0;font-size:12px;color:var(--muted)}
+.buy{background:var(--navy);color:var(--paper);padding:8px 10px;border-radius:9px;font-weight:900;font-size:13px;white-space:nowrap}
+.buy:disabled{background:#CFC8B6;color:#7C7666;cursor:default}
+.owned{font-size:12px;color:var(--ok);font-weight:900}
+@media (prefers-reduced-motion:reduce){.st.hint,.slot.r,.avatar.walk svg{animation:none}.fx{animation-duration:.01s}}
+@media (max-height:640px){.rail{min-height:92px}.st-art svg{max-height:36px}.tk{gap:2px}}
+</style>
+
+<div id="app">
+  <!-- TITLE / CLOCK-IN -->
+  <section class="scr" id="scr-title">
+    <div class="logo">
+      <svg width="58" height="58" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#22345F"/><path d="M32 6 L37.5 25 L57 26 L41.5 38 L47 57 L32 46 L17 57 L22.5 38 L7 26 L26.5 25Z" fill="#F6B42C"/><circle cx="32" cy="32" r="5" fill="#FFD66B"/></svg>
+      <h1>Morningstar<span>Print Shop</span></h1>
+    </div>
+    <p class="tag">Clock in as yourself, run every department, and get the orders out the door before your customers lose patience.</p>
+    <div id="t-peers-wrap" hidden><p class="label">On the floor now</p><div class="peers" id="t-peers"></div></div>
+    <div>
+      <p class="label">Who's clocking in?</p>
+      <div class="crew-grid" id="crew-grid"></div>
+    </div>
+    <div class="who" id="who"></div>
+    <div class="bank"><span id="t-day">Day 1</span><span>Shop bank <b class="num" id="t-bank">$0</b></span></div>
+    <button class="cta" id="btn-start">Clock in</button>
+    <div class="btnrow">
+      <button class="sec" id="btn-shop">Upgrade the shop</button>
+      <button class="sec" id="btn-how">How to play</button>
+    </div>
+    <div>
+      <p class="label">Team board · best shifts</p>
+      <div class="board" id="t-board"></div>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section class="scr" id="scr-game" hidden>
+    <div class="hud">
+      <div class="clock num"><small id="g-day">DAY 1</small><span id="g-clock">8:00 AM</span></div>
+      <div class="goal">
+        <div class="gl"><span>Today</span><span><b class="num" id="g-rev">$0</b> / <span class="num" id="g-goal">$3,000</span></span></div>
+        <div class="gbar"><i id="g-gbar"></i></div>
+      </div>
+      <button class="icon-btn" id="btn-pause" aria-label="Pause">
+        <svg width="16" height="16" viewBox="0 0 16 16"><rect x="3" y="2" width="3.5" height="12" rx="1" fill="#FBF8F0"/><rect x="9.5" y="2" width="3.5" height="12" rx="1" fill="#FBF8F0"/></svg>
+      </button>
+    </div>
+    <div id="g-peers" hidden><div class="peers" id="g-peers-list"></div></div>
+    <div class="rail" id="rail"></div>
+    <div class="floor" id="floor"></div>
+    <div class="bottom" id="bottom">
+      <div class="hintline" id="hint">Tap a station to walk there. Tap several to line up your moves.</div>
+      <div class="mini" id="mini" hidden>
+        <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+          <span class="mlabel" id="mini-label">Pull when the marker is in the green</span>
+          <div class="mbar" id="mbar"><div class="mzone" id="mzone"></div><div class="mzone pf" id="mzone2"></div><div class="mmark" id="mmark"></div></div>
+        </div>
+        <button class="mbtn" id="mbtn">PULL</button>
+      </div>
+    </div>
+    <div class="modal" id="pause" hidden>
+      <div class="card">
+        <h2>On break</h2>
+        <p>The clock is stopped. Your jobs will wait.</p>
+        <button class="cta" id="btn-resume">Back to work</button>
+        <button class="ghost" id="btn-sound">Sound: on</button>
+        <button class="ghost" id="btn-quit">End shift now</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- END OF SHIFT -->
+  <section class="scr" id="scr-end" hidden>
+    <div class="sum" id="sum"></div>
+    <button class="cta" id="btn-next">Next shift</button>
+    <div class="btnrow">
+      <button class="sec" id="btn-shop2">Upgrade the shop</button>
+      <button class="sec" id="btn-home">Change player</button>
+    </div>
+    <div>
+      <p class="label">Team board · best shifts</p>
+      <div class="board" id="e-board"></div>
+    </div>
+  </section>
+
+  <!-- SHOP -->
+  <section class="scr" id="scr-shop" hidden>
+    <div class="logo" style="padding-top:0">
+      <h1 style="font-size:26px">Shop<span>Upgrades &amp; crew</span></h1>
+    </div>
+    <div class="bank"><span>Spend what the shop has earned</span><span>Bank <b class="num" id="s-bank">$0</b></span></div>
+    <div class="tabs"><button id="tab-eq" class="sel">Equipment</button><button id="tab-crew">Put crew on the schedule</button></div>
+    <div class="items" id="items"></div>
+    <button class="cta" id="btn-shop-done">Done</button>
+  </section>
+
+  <div class="modal" id="how" hidden>
+    <div class="card">
+      <h2>How to play</h2>
+      <p><b>Tap a station</b> to walk there and do its job. Tap several in a row to line up moves, or tap an order ticket to head to its next station.</p>
+      <p><b>Screen print:</b> Sales → Receiving → Screen Room → Press → Dryer → Finishing → Shipping.<br><b>Embroidery</b> and <b>Heat press</b> skip screens and the dryer.</p>
+      <p>The <b>dryer</b> and <b>embroidery machine</b> run on their own. Pull loads when they flash green. Leave shirts in the dryer too long and they scorch.</p>
+      <p>On press and heat press, <b>tap PULL in the gold zone</b> for a perfect print and a bigger payout.</p>
+      <p>Ship fast for bigger tips. If a customer's bar runs out, they cancel. Spend your earnings on equipment and put coworkers on the schedule to cover stations.</p>
+      <button class="cta" id="btn-how-close">Got it</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $ = s => document.querySelector(s);
+const fmt = n => "$" + Math.round(n).toLocaleString("en-US");
+const rnd = (a,b) => a + Math.random()*(b-a);
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ------------------------------------------------------------------ data */
+const SHIFT = 180;              // real seconds in one 8:00–4:30 shift
+const SKINS = ["#F6D7BC","#E9B98F","#C98E66","#9C6644","#6B4430"];
+const HAIRS = ["#1C1714","#4A2F1D","#8C4A22","#C9A66B","#B7B0A8","#E4453A"];
+const STYLES = ["short","long","bun","curly","cap","beanie","bald"];
+
+const TEAM = [
+  {id:"jamesb",  name:"James B.", role:"CMO · Operations · Production Mgr", shirt:"#F6B42C", home:[], look:{style:"cap",hair:1},
+   perk:"Production manager: you work every station 12% faster", hire:"Keeps the crew moving: helpers work 20% faster", cost:6000},
+  {id:"natall",  name:"Natall",   role:"CEO", shirt:"#31477A", home:[], look:{style:"long",hair:0},
+   perk:"CEO: every order is worth 15% more", hire:"Lands bigger deals: orders worth 15% more", cost:6000},
+  {id:"jessica", name:"Jessica",  role:"Lead Sales & Customer Service", shirt:"#E4453A", home:["sales"], look:{style:"long",hair:2},
+   perk:"Customers wait 25% longer and tip more", hire:"Runs the Sales Desk; customers wait 25% longer", cost:2500},
+  {id:"bonnie",  name:"Bonnie",   role:"Bookkeeping & HR", shirt:"#2E7D5B", home:["ship"], look:{style:"bun",hair:4},
+   perk:"Tight invoicing: every job pays 8% more", hire:"Invoices & ships jobs; every job pays 8% more", cost:2000},
+  {id:"billy",   name:"Billy",    role:"Press Operator · Screen Printing Lead", shirt:"#1FA6B8", home:["press"], look:{style:"cap",hair:1,beard:true},
+   perk:"Home turf: Press 50% faster", hire:"Runs the press and lays shirts on the dryer", cost:5000, only:{dryer:"load"}},
+  {id:"jamesg",  name:"James G.", role:"Finisher & Press Assistant", shirt:"#5E6AD2", home:["finish","dryer"], look:{style:"short",hair:0},
+   perk:"Home turf: Finishing & Dryer 50% faster", hire:"Catches at the dryer and folds & bags", cost:3500, only:{dryer:"unload"}},
+  {id:"eric",    name:"Eric",     role:"Screen Department & Press Assistant", shirt:"#D96C1E", home:["screens"], look:{style:"beanie",hair:1},
+   perk:"Home turf: Screen Room 50% faster", hire:"Coats, burns and tapes every screen", cost:3000},
+  {id:"chelsea", name:"Chelsea",  role:"Embroiderer", shirt:"#8A5CC7", home:["emb"], look:{style:"bun",hair:2},
+   perk:"Home turf: Embroidery 50% faster", hire:"Hoops and runs the embroidery machine", cost:4500},
+  {id:"nina",    name:"Nina",     role:"Receiving & Heat Press", shirt:"#C2417A", home:["recv","heat"], look:{style:"long",hair:0},
+   perk:"Home turf: Receiving & Heat Press 50% faster", hire:"Checks in blanks and runs the heat press", cost:3000},
+  {id:"chrislene",name:"Chrislene",role:"VA · Marketing", shirt:"#F08A8A", home:[], look:{style:"curly",hair:0},
+   perk:"Marketing: new orders come in 25% faster", hire:"Posts & campaigns: orders come in 25% faster", cost:4000},
+  {id:"john",    name:"John",     role:"VA · Web Development", shirt:"#3C8DDB", home:[], look:{style:"short",hair:1},
+   perk:"Online stores: web-store orders pay 30% more", hire:"Builds client web stores: online orders pay 30% more", cost:4000},
+];
+const TEAM_BY = Object.fromEntries(TEAM.map(t=>[t.id,t]));
+
+const ST = {
+  sales:  {name:"Sales Desk",  sub:"Quote & approve art"},
+  recv:   {name:"Receiving",   sub:"Count in blanks"},
+  screens:{name:"Screen Room", sub:"Coat · burn · tape"},
+  heat:   {name:"Heat Press",  sub:"DTF · 305°F · 15 sec"},
+  press:  {name:"Press",       sub:"6-color manual"},
+  dryer:  {name:"Dryer",       sub:"Cure at 320°F", auto:true},
+  emb:    {name:"Embroidery",  sub:"Hoop & run", auto:true},
+  finish: {name:"Finishing",   sub:"Fold · tag · bag"},
+  ship:   {name:"Shipping",    sub:"Invoice & ship"},
+};
+const ORDER = ["sales","recv","screens","heat","press","dryer","emb","finish","ship"];
+const ROUTES = {
+  sp:  ["sales","recv","screens","press","dryer","finish","ship"],
+  emb: ["sales","recv","emb","finish","ship"],
+  heat:["sales","recv","heat","finish","ship"],
+};
+const CLIENTS = [
+  ["MLB","ent"],["Garmin","ent"],["T-Mobile","ent"],
+  ["Cascade Roofing","trade"],["Ironline Electric","trade"],["Summit Concrete","trade"],["Keystone Plumbing","trade"],["Redline HVAC","trade"],["Northfork Builders","trade"],
+  ["Driftwood Coffee","brand"],["Night Owl Apparel","brand"],["Pinecrest Brewing","brand"],["Bluebird Yoga","brand"],
+  ["Web store","dtc"],["Family reunion","dtc"],["5K fun run","dtc"],["Little League","dtc"],["Church youth group","dtc"],
+];
+const GARMENTS = {
+  sp:  ["Gildan 5000","Bella+Canvas 3001","Comfort Colors 1717","Next Level 6210","Independent SS4500","Carhartt K87","Hi-vis safety tee"],
+  emb: ["Richardson 112","Port Authority K500 polo","Carhartt A18 beanie","Flexfit 6277","Carhartt J130 jacket"],
+  heat:["Hi-vis safety tee","Gildan 5000","Sport-Tek jerseys (names & #s)","Nike Dri-FIT polo"],
+};
+const MIX = {ent:{sp:.6,emb:.3,heat:.1}, trade:{sp:.45,emb:.3,heat:.25}, brand:{sp:.7,emb:.2,heat:.1}, dtc:{sp:.5,emb:.1,heat:.4}};
+const QTY = {ent:[96,288], trade:[36,144], brand:[48,144], dtc:[12,48]};
+
+const UPG = [
+  {id:"shoes", name:"Anti-fatigue mats & real shoes", desc:"Walk the floor 35% faster", cost:1500, st:"ship"},
+  {id:"fold",  name:"Folding boards & poly bagger", desc:"Finishing 35% faster", cost:2500, st:"finish"},
+  {id:"heat2", name:"Dual-platen heat press", desc:"Heat press 40% faster", cost:3500, st:"heat"},
+  {id:"led",   name:"LED exposure unit", desc:"Burn screens 40% faster", cost:4000, st:"screens"},
+  {id:"rail",  name:"Second order rail", desc:"Take on 1 more job at a time", cost:5000, st:"sales"},
+  {id:"dryer2",name:"Longer dryer belt", desc:"Dryer holds 3 loads instead of 2", cost:6000, st:"dryer"},
+  {id:"emb2",  name:"Second multi-head", desc:"Run 2 embroidery jobs at once", cost:8000, st:"emb"},
+  {id:"auto",  name:"Automatic press", desc:"Press runs 45% faster", cost:12000, st:"press"},
+];
+
+/* ------------------------------------------------------------------ save */
+function defSave(){ return {day:1, cash:0, owned:{}, crew:{}, char:"jamesb", looks:{}, best:[], muted:false, seenHow:false}; }
+function loadSave(){
+  try{ const r = JSON.parse(localStorage.getItem("msps-save")||"null"); if(r && typeof r==="object") return Object.assign(defSave(), r); }catch(e){}
+  return defSave();
+}
+let S = loadSave();
+function save(){ try{ localStorage.setItem("msps-save", JSON.stringify(S)); }catch(e){} }
+
+function lookOf(id){
+  const t = TEAM_BY[id] || TEAM[0];
+  return Object.assign({skin:1, hair:0, style:"short", beard:false}, t.look, S.looks[id]||{});
+}
+function cleanLook(l){
+  l = (l && typeof l==="object") ? l : {};
+  return {
+    skin: Math.max(0, Math.min(SKINS.length-1, l.skin|0)),
+    hair: Math.max(0, Math.min(HAIRS.length-1, l.hair|0)),
+    style: STYLES.includes(l.style) ? l.style : "short",
+    beard: !!l.beard,
+  };
+}
+
+/* ------------------------------------------------------------------ art */
+function avatarSVG(id, look){
+  const t = TEAM_BY[id] || TEAM[0];
+  const L = cleanLook(look || lookOf(id));
+  const skin = SKINS[L.skin], hair = HAIRS[L.hair], sh = t.shirt;
+  let h = "";
+  switch(L.style){
+    case "short": h = `<path d="M13 20 q0-12 11-12 q11 0 11 12 q-3-6-11-6 q-8 0-11 6Z" fill="${hair}"/>`; break;
+    case "long":  h = `<path d="M12.5 20 q0-12.5 11.5-12.5 q11.5 0 11.5 12.5 v11 q-2.5 2-4.5 0 v-10 q-3-5-7-5 q-4 0-7 5 v10 q-2 2-4.5 0Z" fill="${hair}"/>`; break;
+    case "bun":   h = `<circle cx="24" cy="6.5" r="5" fill="${hair}"/><path d="M13 20 q0-12 11-12 q11 0 11 12 q-3-6-11-6 q-8 0-11 6Z" fill="${hair}"/>`; break;
+    case "curly": h = `<g fill="${hair}"><circle cx="15" cy="15" r="5"/><circle cx="21" cy="10" r="5.5"/><circle cx="28" cy="10" r="5.5"/><circle cx="33" cy="15" r="5"/><circle cx="13.5" cy="21" r="3.5"/><circle cx="34.5" cy="21" r="3.5"/></g>`; break;
+    case "cap":   h = `<path d="M13 19 q0-11 11-11 q11 0 11 11Z" fill="#14213D"/><rect x="22" y="16.5" width="18" height="3.4" rx="1.7" fill="#14213D"/><path d="M24 10.5 l1.2 2.6 2.8.2-2.2 1.8.8 2.7-2.6-1.6-2.6 1.6.8-2.7-2.2-1.8 2.8-.2Z" fill="#F6B42C"/>`; break;
+    case "beanie":h = `<path d="M12.5 18 q0-12 11.5-12 q11.5 0 11.5 12Z" fill="#E4453A"/><rect x="12" y="15.5" width="24" height="5" rx="2.5" fill="#B8322A"/>`; break;
+    case "bald":  h = ``; break;
+  }
+  const beard = L.beard ? `<path d="M14.5 22 q1 11 9.5 11 q8.5 0 9.5-11 q-3 5.5-9.5 5.5 q-6.5 0-9.5-5.5Z" fill="${hair}"/>` : "";
+  return `<svg viewBox="0 0 48 56" aria-hidden="true">
+    <path d="M9 56 V43 q0-11 15-11 q15 0 15 11 V56Z" fill="${sh}"/>
+    <path d="M24 40.5 l1.6 3.4 3.7.3-2.8 2.4.9 3.6-3.4-2-3.4 2 .9-3.6-2.8-2.4 3.7-.3Z" fill="#fff" opacity=".92"/>
+    <rect x="20.5" y="28" width="7" height="6" rx="2" fill="${skin}"/>
+    <circle cx="24" cy="21" r="11" fill="${skin}"/>
+    ${beard}${h}
+    <circle cx="20" cy="22" r="1.4" fill="#1b1b1b"/><circle cx="28" cy="22" r="1.4" fill="#1b1b1b"/>
+    <path d="M20.5 26.5 q3.5 2.6 7 0" stroke="#1b1b1b" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+
+const ART = {
+  sales:`<svg viewBox="0 0 64 40"><rect x="5" y="25" width="54" height="5" rx="2" fill="#8B5E3C"/><rect x="9" y="30" width="4" height="9" fill="#6D4A2F"/><rect x="51" y="30" width="4" height="9" fill="#6D4A2F"/><rect x="15" y="9" width="24" height="15" rx="2" fill="#14213D"/><rect x="17" y="11" width="20" height="11" fill="#1FA6B8"/><path d="M24 13h6l3 2-1.6 1.4-1.4-.6V21h-6v-5.2l-1.4.6L21 15Z" fill="#fff"/><rect x="42" y="16" width="12" height="9" rx="1" fill="#fff" stroke="#C9C1AD"/><rect x="44" y="18.5" width="8" height="1.4" fill="#E4453A"/><rect x="44" y="21.5" width="6" height="1.4" fill="#C9C1AD"/></svg>`,
+  recv:`<svg viewBox="0 0 64 40"><rect x="8" y="19" width="22" height="19" fill="#C8955A"/><rect x="18" y="19" width="3" height="19" fill="#E8CF9F"/><rect x="31" y="23" width="20" height="15" fill="#B98449"/><rect x="40" y="23" width="3" height="15" fill="#E8CF9F"/><rect x="16" y="3" width="21" height="16" fill="#D3A46A"/><rect x="25" y="3" width="3" height="16" fill="#EDD7AC"/><rect x="10" y="29" width="7" height="5" fill="#fff"/><rect x="33" y="30" width="6" height="4" fill="#fff"/></svg>`,
+  screens:`<svg viewBox="0 0 64 40"><rect x="5" y="5" width="27" height="32" rx="1.5" fill="#A7ADB5"/><rect x="8" y="8" width="21" height="26" fill="#F2C94C"/><path d="M18.5 13 l2.4 5.2 5.6.5-4.2 3.7 1.3 5.5-5.1-3-5.1 3 1.3-5.5-4.2-3.7 5.6-.5Z" fill="#FBF3D0"/><rect x="34" y="7" width="25" height="30" rx="1.5" fill="#A7ADB5"/><rect x="37" y="10" width="19" height="24" fill="#E4453A" opacity=".85"/><rect x="37" y="10" width="19" height="3" fill="#6FA0D8"/><rect x="37" y="31" width="19" height="3" fill="#6FA0D8"/></svg>`,
+  heat:`<svg viewBox="0 0 64 40"><rect x="9" y="30" width="46" height="7" rx="2" fill="#2B2F3A"/><rect x="13" y="26" width="38" height="4" rx="1" fill="#DAD6CC"/><path d="M11 21 L50 11 L52.5 15.5 L13.5 25.5Z" fill="#1FA6B8"/><rect x="48" y="2" width="3.5" height="14" rx="1.5" fill="#2B2F3A"/><rect x="18" y="23" width="14" height="3" fill="#FFD66B"/><circle cx="14" cy="33.5" r="1.6" fill="#E4453A"/></svg>`,
+  press:`<svg viewBox="0 0 64 40"><g stroke="#2B2F3A" stroke-width="3"><line x1="32" y1="20" x2="10" y2="20"/><line x1="32" y1="20" x2="54" y2="20"/><line x1="32" y1="20" x2="32" y2="3"/><line x1="32" y1="20" x2="32" y2="37"/></g><rect x="3" y="15" width="11" height="10" rx="1" fill="#E4453A"/><rect x="50" y="15" width="11" height="10" rx="1" fill="#F6B42C"/><rect x="26" y="0.5" width="12" height="7" rx="1" fill="#1FA6B8"/><rect x="26" y="32.5" width="12" height="7" rx="1" fill="#FBF8F0" stroke="#B9B29F"/><circle cx="32" cy="20" r="5.5" fill="#14213D"/></svg>`,
+  dryer:`<svg viewBox="0 0 64 40"><rect x="3" y="25" width="58" height="6" rx="3" fill="#2B2F3A"/><rect x="17" y="8" width="30" height="19" rx="2" fill="#54586A"/><rect x="20" y="20" width="24" height="4" rx="1" fill="#FF8A3D"/><rect x="20" y="20" width="24" height="4" rx="1" fill="#FFD66B" opacity=".5"/><path d="M5 22h8l2 1.5-1 1H6l-1-1Z" fill="#fff"/><path d="M50 22h8l1 1.5-1 1h-8l-1-1Z" fill="#fff"/><rect x="8" y="31" width="3" height="8" fill="#54586A"/><rect x="53" y="31" width="3" height="8" fill="#54586A"/></svg>`,
+  emb:`<svg viewBox="0 0 64 40"><rect x="6" y="9" width="52" height="11" rx="2" fill="#E8E4D8" stroke="#B9B29F"/><circle cx="14" cy="6" r="3" fill="#E4453A"/><circle cx="23" cy="6" r="3" fill="#1FA6B8"/><circle cx="32" cy="6" r="3" fill="#F6B42C"/><circle cx="41" cy="6" r="3" fill="#8A5CC7"/><circle cx="50" cy="6" r="3" fill="#2E7D5B"/><rect x="30.5" y="20" width="3" height="5" fill="#54586A"/><ellipse cx="32" cy="30" rx="14" ry="6" fill="#FBF8F0" stroke="#8B5E3C" stroke-width="2.4"/><path d="M28 30 l4-3 4 3-4 3Z" fill="#8A5CC7"/><rect x="4" y="36" width="56" height="3" rx="1.5" fill="#54586A"/></svg>`,
+  finish:`<svg viewBox="0 0 64 40"><rect x="10" y="29" width="30" height="8" rx="2" fill="#E4453A"/><rect x="12" y="21" width="30" height="8" rx="2" fill="#1FA6B8"/><rect x="9" y="13" width="30" height="8" rx="2" fill="#FBF8F0" stroke="#B9B29F"/><path d="M20 15.5 l2-1.5h5l2 1.5" stroke="#B9B29F" fill="none"/><rect x="44" y="12" width="14" height="25" rx="2" fill="#DCEBF2" opacity=".9" stroke="#9CC3D4"/><rect x="47" y="16" width="8" height="4" fill="#fff"/></svg>`,
+  ship:`<svg viewBox="0 0 64 40"><rect x="8" y="12" width="34" height="26" fill="#C8955A"/><rect x="23" y="12" width="4" height="26" fill="#E8CF9F"/><rect x="11" y="16" width="9" height="7" fill="#fff"/><rect x="12" y="18" width="7" height="1.2" fill="#172036"/><rect x="12" y="20.5" width="5" height="1.2" fill="#172036"/><path d="M34 22 l1.6 3.3 3.6.3-2.7 2.4.8 3.5-3.3-2-3.3 2 .8-3.5-2.7-2.4 3.6-.3Z" fill="#F6B42C"/><rect x="46" y="20" width="14" height="12" rx="2" fill="#14213D"/><rect x="48" y="22" width="6" height="4" fill="#6FA0D8"/><circle cx="50" cy="34" r="3" fill="#2B2F3A"/></svg>`,
+};
+const STAR = (on) => `<svg viewBox="0 0 24 24"><path d="M12 1.8 l3.1 6.6 7.1.8-5.3 4.9 1.5 7.1L12 17.6l-6.4 3.6 1.5-7.1-5.3-4.9 7.1-.8Z" fill="${on?"#F6B42C":"#3A4B78"}" stroke="${on?"#B9801A":"#22345F"}" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+
+/* ------------------------------------------------------------------ sound */
+let AC = null;
+function beep(f, d, type, vol){
+  if(S.muted) return;
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = type||"sine"; o.frequency.value = f; g.gain.value = vol||0.05;
+    o.connect(g); g.connect(AC.destination);
+    const t = AC.currentTime; g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.start(t); o.stop(t + d);
+  }catch(e){}
+}
+const SFX = {
+  tap:()=>beep(660,.06,"triangle",.04),
+  done:()=>beep(880,.09,"triangle",.05),
+  cash:()=>{beep(1046,.1,"square",.035); setTimeout(()=>beep(1568,.16,"square",.035),90);},
+  ding:()=>beep(1318,.2,"sine",.06),
+  bad:()=>beep(160,.3,"sawtooth",.05),
+  perfect:()=>{beep(784,.08,"triangle",.05);setTimeout(()=>beep(1175,.14,"triangle",.05),70);},
+};
+
+/* ------------------------------------------------------------------ cloud (team board + who's on) */
+const cloud = {db:null, room:null, board:null, peers:[], lastPresence:0, presenceKey:""};
+async function initCloud(){
+  const C = window.claude;
+  if(!C || typeof C.use !== "function"){ renderBoards(); return; }
+  try{
+    const db = await C.use("db");
+    if(db){
+      cloud.db = db;
+      db.collection("shifts").orderBy("revenue","desc").limit(15).onSnapshot(
+        snap => { cloud.board = snap.docs.map(d => d.data()); renderBoards(); },
+        () => { cloud.db = null; cloud.board = null; renderBoards(); }
+      );
+    }
+  }catch(e){}
+  renderBoards();
+  try{
+    const room = await C.use("room");
+    if(room){
+      cloud.room = room;
+      room.onPeers(ch => { cloud.peers = (ch.peers||[]).filter(p => !p.isMe); renderPeers(); }, ()=>{});
+      pushPresence(true);
+    }
+  }catch(e){}
+}
+function pushPresence(force){
+  if(!cloud.room) return;
+  const now = performance.now();
+  const playing = G && G.running;
+  const data = {char:S.char, look:cleanLook(lookOf(S.char)), day:S.day, today: playing ? Math.round(G.rev) : 0, status: playing ? "on shift" : "clocked out"};
+  const key = JSON.stringify(data);
+  if(!force && (key === cloud.presenceKey || now - cloud.lastPresence < 3000)) return;
+  cloud.presenceKey = key; cloud.lastPresence = now;
+  cloud.room.presence(data).catch(()=>{});
+}
+function renderPeers(){
+  const list = cloud.peers.map(p => p.presence || {}).filter(p => TEAM_BY[p.char]);
+  const html = list.map(p => {
+    const t = TEAM_BY[p.char];
+    const extra = p.status === "on shift" ? " · " + fmt(Number(p.today)||0) : " · Day " + (Number(p.day)|0);
+    return `<span class="peer">${avatarSVG(p.char, p.look)}<span class="dot" style="background:${p.status==="on shift"?"var(--ok)":"#9FAAC6"}"></span>${esc(t.name)}${esc(extra)}</span>`;
+  }).join("");
+  $("#t-peers").innerHTML = html; $("#g-peers-list").innerHTML = html;
+  $("#t-peers-wrap").hidden = !list.length; $("#g-peers").hidden = !list.length;
+}
+function renderBoards(){
+  let rows, shared = !!cloud.board;
+  if(shared){
+    rows = cloud.board.filter(r => r && TEAM_BY[r.char]).map(r => ({char:r.char, look:r.look, day:Number(r.day)|0, revenue:Number(r.revenue)||0, stars:Math.max(0,Math.min(3,Number(r.stars)|0)), shipped:Number(r.shipped)|0, at:Number(r.at)||0}));
+  } else {
+    rows = (S.best||[]).slice();
+  }
+  rows = rows.slice(0,10);
+  let html = rows.map((r,i) => {
+    const t = TEAM_BY[r.char];
+    const mine = G && G.lastPost && G.lastPost.at === r.at && G.lastPost.char === r.char;
+    return `<div class="brow${mine?" me":""}"><span class="rk">${i+1}</span>${avatarSVG(r.char, r.look)}<span>${esc(t.name)}<small>Day ${r.day} · ${r.shipped} jobs · ${"★".repeat(r.stars)}${"☆".repeat(3-r.stars)}</small></span><span class="amt num">${fmt(r.revenue)}</span></div>`;
+  }).join("");
+  if(!rows.length) html = `<p class="empty">No shifts logged yet. Finish a shift to set the first score.</p>`;
+  if(!shared) html += `<p class="empty">${cloud.db===null && window.claude ? "Showing shifts from this phone." : "Showing shifts from this phone. Open the game from its claude.ai link to share a board with the crew."}</p>`;
+  $("#t-board").innerHTML = html; $("#e-board").innerHTML = html;
+}
+async function postShift(rec){
+  S.best = (S.best||[]).concat([rec]).sort((a,b)=>b.revenue-a.revenue).slice(0,10);
+  save();
+  if(cloud.db){ try{ await cloud.db.collection("shifts").add(rec); }catch(e){} }
+  renderBoards();
+}
+
+/* ------------------------------------------------------------------ title screen */
+let lookOpen = false;
+function renderTitle(){
+  $("#crew-grid").innerHTML = TEAM.map(t => `<button class="crew${t.id===S.char?" sel":""}" data-id="${t.id}">${avatarSVG(t.id)}<span>${esc(t.name)}</span></button>`).join("");
+  const t = TEAM_BY[S.char], L = lookOf(S.char);
+  const turf = t.home.length ? t.home.map(h=>ST[h].name).join(" & ") : "Anywhere";
+  $("#who").innerHTML = `${avatarSVG(S.char)}
+    <h2>${esc(t.name)}</h2>
+    <div class="role">${esc(t.role)}</div>
+    <div class="perk"><b>Perk</b> · ${esc(t.perk)}</div>
+    <div class="looks">
+      <button class="chipb" id="look-toggle" style="align-self:flex-start">${lookOpen?"Done editing look":"Edit my look"}</button>
+      ${lookOpen ? `
+      <div class="row"><span>Skin</span>${SKINS.map((c,i)=>`<button class="sw${L.skin===i?" sel":""}" style="background:${c}" data-k="skin" data-v="${i}" aria-label="Skin tone ${i+1}"></button>`).join("")}</div>
+      <div class="row"><span>Hair</span>${HAIRS.map((c,i)=>`<button class="sw${L.hair===i?" sel":""}" style="background:${c}" data-k="hair" data-v="${i}" aria-label="Hair color ${i+1}"></button>`).join("")}</div>
+      <div class="row"><span>Style</span>${STYLES.map(s=>`<button class="chipb${L.style===s?" sel":""}" data-k="style" data-v="${s}">${s}</button>`).join("")}</div>
+      <div class="row"><span>Beard</span><button class="chipb${L.beard?" sel":""}" data-k="beard" data-v="1">${L.beard?"yes":"no"}</button></div>` : ""}
+    </div>`;
+  $("#t-day").textContent = "Day " + S.day + " · goal " + fmt(goalFor(S.day));
+  $("#t-bank").textContent = fmt(S.cash);
+  $("#btn-start").textContent = "Clock in · Day " + S.day;
+}
+$("#crew-grid").addEventListener("click", e => {
+  const b = e.target.closest(".crew"); if(!b) return;
+  S.char = b.dataset.id; save(); SFX.tap(); renderTitle(); pushPresence(true);
+});
+$("#who").addEventListener("click", e => {
+  if(e.target.closest("#look-toggle")){ lookOpen = !lookOpen; renderTitle(); return; }
+  const b = e.target.closest("[data-k]"); if(!b) return;
+  const L = Object.assign({}, S.looks[S.char] || {});
+  const cur = lookOf(S.char);
+  if(b.dataset.k === "beard") L.beard = !cur.beard;
+  else if(b.dataset.k === "style") L.style = b.dataset.v;
+  else L[b.dataset.k] = Number(b.dataset.v);
+  S.looks[S.char] = L; save(); SFX.tap(); renderTitle(); pushPresence(true);
+});
+
+function show(id){
+  for(const s of ["#scr-title","#scr-game","#scr-end","#scr-shop"]) $(s).hidden = (s !== id);
+  if(id === "#scr-title") renderTitle();
+  if(id === "#scr-shop") renderShop();
+}
+$("#btn-start").addEventListener("click", () => { SFX.tap(); startShift(); });
+$("#btn-shop").addEventListener("click", () => { shopBack = "#scr-title"; show("#scr-shop"); });
+$("#btn-shop2").addEventListener("click", () => { shopBack = "#scr-end"; show("#scr-shop"); });
+$("#btn-home").addEventListener("click", () => show("#scr-title"));
+$("#btn-next").addEventListener("click", () => { SFX.tap(); startShift(); });
+$("#btn-how").addEventListener("click", () => { $("#how").hidden = false; });
+$("#btn-how-close").addEventListener("click", () => { $("#how").hidden = true; S.seenHow = true; save(); });
+
+/* ------------------------------------------------------------------ shop */
+let shopTab = "eq", shopBack = "#scr-title";
+function renderShop(){
+  $("#s-bank").textContent = fmt(S.cash);
+  $("#tab-eq").classList.toggle("sel", shopTab==="eq");
+  $("#tab-crew").classList.toggle("sel", shopTab==="crew");
+  let html = "";
+  if(shopTab === "eq"){
+    html = UPG.map(u => `<div class="item"><span class="ic">${ART[u.st]}</span><div><h3>${esc(u.name)}</h3><p>${esc(u.desc)}</p></div>${
+      S.owned[u.id] ? `<span class="owned">Installed</span>` : `<button class="buy num" data-buy="${u.id}" ${S.cash<u.cost?"disabled":""}>${fmt(u.cost)}</button>`}</div>`).join("");
+  } else {
+    html = TEAM.map(t => {
+      const you = t.id === S.char;
+      const right = you ? `<span class="owned">That's you</span>` : S.crew[t.id] ? `<span class="owned">Scheduled</span>` :
+        `<button class="buy num" data-hire="${t.id}" ${S.cash<t.cost?"disabled":""}>${fmt(t.cost)}</button>`;
+      return `<div class="item">${avatarSVG(t.id)}<div><h3>${esc(t.name)}</h3><p>${esc(t.hire)}</p></div>${right}</div>`;
+    }).join("");
+  }
+  $("#items").innerHTML = html;
+}
+$("#tab-eq").addEventListener("click", () => { shopTab="eq"; renderShop(); });
+$("#tab-crew").addEventListener("click", () => { shopTab="crew"; renderShop(); });
+$("#items").addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b || b.disabled) return;
+  if(b.dataset.buy){ const u = UPG.find(x=>x.id===b.dataset.buy); if(u && S.cash>=u.cost && !S.owned[u.id]){ S.cash -= u.cost; S.owned[u.id]=true; } }
+  if(b.dataset.hire){ const t = TEAM_BY[b.dataset.hire]; if(t && S.cash>=t.cost && !S.crew[t.id]){ S.cash -= t.cost; S.crew[t.id]=true; } }
+  save(); SFX.cash(); renderShop();
+});
+$("#btn-shop-done").addEventListener("click", () => show(shopBack));
+
+/* ------------------------------------------------------------------ game state */
+let G = null;
+function goalFor(day){ return Math.min(22000, 3000 + (day-1)*1400); }
+function cap(sid){ return sid==="dryer" ? (S.owned.dryer2?3:2) : sid==="emb" ? (S.owned.emb2?2:1) : 1; }
+function maxTickets(){ return 4 + (S.owned.rail?1:0); }
+
+function computePerks(){
+  const on = new Set([S.char]);
+  for(const k in S.crew) if(S.crew[k] && k !== S.char) on.add(k);
+  return {
+    value: on.has("natall"), patience: on.has("jessica"), invoice: on.has("bonnie"),
+    rate: on.has("chrislene"), web: on.has("john"),
+    pm: S.char === "jamesb", crewBoost: !!S.crew.jamesb && S.char !== "jamesb",
+  };
+}
+
+function makeJob(){
+  G.seq++;
+  const [client, tier] = pick(CLIENTS);
+  const mix = MIX[tier]; const r = Math.random();
+  const method = r < mix.sp ? "sp" : r < mix.sp + mix.emb ? "emb" : "heat";
+  const [q0,q1] = QTY[tier];
+  const qty = Math.round(rnd(q0,q1)/12)*12 || 12;
+  const colors = method==="sp" ? 1 + Math.floor(Math.random()*(tier==="ent"?5:4)) : 0;
+  const garment = pick(GARMENTS[method]);
+  let ppc = method==="sp" ? 4.5 + 1.1*colors + (qty<48?3:0) : method==="emb" ? 12 : (garment.includes("jersey")?14:8);
+  ppc *= tier==="dtc" ? 1.25 : tier==="trade" ? 1.1 : 1;
+  const steps = ROUTES[method];
+  const dayF = 1 - Math.min(0.3, (G.day-1)*0.04);
+  let pat = (48 + steps.length*10 + qty*0.08) * dayF * (G.perks.patience?1.25:1);
+  return {id:G.seq, client, tier, method, qty, colors, garment, value:Math.round(qty*ppc),
+          steps, si:0, state:"wait", lock:null, lockKind:null, pat, patMax:pat, autoT:0, autoDur:0, readyT:0,
+          perfect:false, scorched:false};
+}
+
+function baseDur(sid, j, kind){
+  const q = j.qty, U = S.owned;
+  switch(sid){
+    case "sales":   return 1.4;
+    case "recv":    return 1.0 + q/140;
+    case "screens": return (0.5 + 0.7*j.colors) * (U.led?0.6:1);
+    case "press":   return Math.min(6, 1.2 + q/60*(0.8+0.1*j.colors)) * (U.auto?0.55:1);
+    case "heat":    return Math.min(5, 1.2 + q/55) * (U.heat2?0.6:1);
+    case "dryer":   return 0.5;
+    case "emb":     return kind==="load" ? 1.0 : 0.6;
+    case "finish":  return (1.0 + q/80) * (U.fold?0.65:1);
+    case "ship":    return 0.8;
+  }
+  return 1;
+}
+function autoRun(sid, j){ return sid==="dryer" ? 5.5 : Math.min(10, 4 + j.qty/20); }
+const DRYER_WINDOW = 5;
+
+function startShift(){
+  G = {
+    running:true, paused:false, t:0, day:S.day, rev:0, goal:goalFor(S.day), seq:0,
+    jobs:[], perks:computePerks(), nextSpawn:0.6, spawned:0,
+    stats:{shipped:0, perfect:0, scorched:0, lost:0, tips:0},
+    P:{x:0,y:0, at:null, target:null, queue:[], task:null, face:1},
+    helpers:[], mini:null, fxAcc:0, uiAcc:1, hintSid:null, lastPost:G && G.lastPost,
+  };
+  for(const t of TEAM){
+    if(S.crew[t.id] && t.id !== S.char && t.home.length){
+      G.helpers.push({id:t.id, stations:t.home.slice(), only:t.only||{}, at:t.home[0], task:null, el:null});
+    }
+  }
+  show("#scr-game");
+  buildFloor();
+  $("#g-day").textContent = "DAY " + G.day;
+  $("#g-goal").textContent = fmt(G.goal);
+  $("#mini").hidden = true; $("#hint").hidden = false;
+  $("#pause").hidden = true;
+  if(!S.seenHow) $("#how").hidden = false;
+  last = performance.now();
+  pushPresence(true);
+  requestAnimationFrame(loop);
+}
+
+/* ------------------------------------------------------------------ floor DOM */
+let tiles = {}, avatarEl = null;
+function buildFloor(){
+  const floor = $("#floor");
+  floor.innerHTML = ORDER.map(sid => `<button class="st" data-sid="${sid}" aria-label="${ST[sid].name}">
+      <span class="qn"></span>
+      <div class="st-art">${ART[sid]}</div>
+      <div class="st-name">${ST[sid].name}</div>
+      <div class="st-info"></div></button>`).join("");
+  tiles = {};
+  floor.querySelectorAll(".st").forEach(el => tiles[el.dataset.sid] = {el, info:el.querySelector(".st-info"), qn:el.querySelector(".qn"), key:""});
+  avatarEl = document.createElement("div");
+  avatarEl.className = "avatar";
+  avatarEl.innerHTML = avatarSVG(S.char) + `<span class="nt">${esc(TEAM_BY[S.char].name)}</span>`;
+  floor.appendChild(avatarEl);
+  for(const h of G.helpers){
+    h.el = document.createElement("div"); h.el.className = "helper";
+    h.el.innerHTML = avatarSVG(h.id) + `<span class="nt">${esc(TEAM_BY[h.id].name)}</span>`;
+    floor.appendChild(h.el);
+  }
+  // start the player at the sales desk
+  const p = standPoint("sales"); G.P.x = p.x; G.P.y = p.y; G.P.at = "sales";
+  placeHelpers();
+}
+function standPoint(sid){
+  const el = tiles[sid].el;
+  return {x: el.offsetLeft + el.offsetWidth/2 - 22, y: el.offsetTop + el.offsetHeight - 50};
+}
+function placeHelpers(){
+  for(const h of G.helpers){
+    const el = tiles[h.at].el;
+    h.el.style.transform = `translate(${el.offsetLeft + el.offsetWidth - 32}px,${el.offsetTop + 2}px)`;
+  }
+}
+window.addEventListener("resize", () => { if(G && G.running){ const p = standPoint(G.P.target || G.P.at || "sales"); if(!G.P.target){ G.P.x=p.x; G.P.y=p.y; } placeHelpers(); } });
+
+$("#floor").addEventListener("pointerdown", e => {
+  const b = e.target.closest(".st"); if(!b || !G || !G.running || G.paused) return;
+  e.preventDefault();
+  queueStation(b.dataset.sid);
+});
+$("#floor").addEventListener("keydown", e => {
+  if((e.key==="Enter"||e.key===" ") && e.target.classList.contains("st")){ e.preventDefault(); queueStation(e.target.dataset.sid); }
+});
+$("#rail").addEventListener("click", e => {
+  const b = e.target.closest(".tk"); if(!b || !G || !G.running || G.paused) return;
+  const j = G.jobs.find(x => x.id === Number(b.dataset.id));
+  if(j) queueStation(j.steps[j.si]);
+});
+function queueStation(sid){
+  const P = G.P;
+  if(P.queue.length >= 5) return;
+  P.queue.push(sid); SFX.tap();
+}
+
+/* ------------------------------------------------------------------ actions */
+function insideCount(sid){
+  return G.jobs.filter(j => j.steps[j.si]===sid && (j.state==="auto" || j.state==="ready" || j.lockKind==="load")).length;
+}
+function findAction(sid, only){
+  const here = G.jobs.filter(j => !j.lock && j.steps[j.si]===sid);
+  const byPat = (a,b) => a.pat - b.pat;
+  if(ST[sid].auto){
+    if(only !== "load"){
+      const r = here.filter(j => j.state==="ready").sort(byPat)[0];
+      if(r) return {job:r, kind:"unload"};
+    }
+    if(only !== "unload" && insideCount(sid) < cap(sid)){
+      const w = here.filter(j => j.state==="wait").sort(byPat)[0];
+      if(w) return {job:w, kind:"load"};
+    }
+    return null;
+  }
+  const w = here.filter(j => j.state==="wait").sort(byPat)[0];
+  return w ? {job:w, kind:"work"} : null;
+}
+function startTask(who, sid, act, speed){
+  const j = act.job;
+  j.lock = who; j.lockKind = act.kind;
+  const dur = baseDur(sid, j, act.kind) / speed;
+  return {sid, job:j, kind:act.kind, t:0, dur};
+}
+function playerSpeed(sid){
+  const t = TEAM_BY[S.char];
+  return (t.home.includes(sid) ? 1.5 : 1) * (G.perks.pm ? 1.12 : 1);
+}
+function helperSpeed(){ return 0.85 * (G.perks.crewBoost ? 1.2 : 1); }
+
+function finishTask(task, who){
+  const j = task.job;
+  j.lock = null; j.lockKind = null;
+  if(!G.jobs.includes(j)) return;
+  if(task.kind === "load"){ j.state = "auto"; j.autoT = 0; j.autoDur = autoRun(task.sid, j); j.readyT = 0; SFX.done(); return; }
+  if(task.sid === "ship"){ pay(j); return; }
+  if(task.sid === "press" || task.sid === "heat"){
+    if(who === "player") resolveMini(j);
+    else if(Math.random() < 0.45){ j.perfect = true; G.stats.perfect++; fx(task.sid, "Perfect print", "meh"); }
+  }
+  j.si++; j.state = "wait"; SFX.done();
+}
+function pay(j){
+  const pk = G.perks;
+  let base = j.value * (pk.value?1.15:1) * (pk.web && j.tier==="dtc" ? 1.3 : 1);
+  const quality = 1 + (j.perfect?0.12:0) - (j.scorched?0.4:0);
+  const tip = base * 0.3 * Math.max(0, j.pat/j.patMax) * (pk.patience?1.2:1);
+  const total = Math.round((base*quality + tip) * (pk.invoice?1.08:1));
+  G.rev += total; G.stats.shipped++; G.stats.tips += tip;
+  G.jobs.splice(G.jobs.indexOf(j), 1);
+  fx("ship", "+" + fmt(total), "money");
+  SFX.cash();
+}
+function walkout(j){
+  G.jobs.splice(G.jobs.indexOf(j), 1);
+  G.stats.lost++;
+  if(G.P.task && G.P.task.job === j) G.P.task = null;
+  for(const h of G.helpers) if(h.task && h.task.job === j) h.task = null;
+  if(G.mini && G.mini.job === j) endMini();
+  fx(j.steps[j.si], j.client + " cancelled", "bad");
+  SFX.bad();
+}
+
+/* ------------------------------------------------------------------ timing mini-game */
+function startMini(j, sid){
+  const zoneW = 0.26, start = rnd(0.12, 0.88 - zoneW);
+  G.mini = {job:j, sid, t:0, period: rnd(0.9,1.2), start, w:zoneW, done:false};
+  $("#mini").hidden = false; $("#hint").hidden = true;
+  $("#mbtn").textContent = sid==="press" ? "PULL" : "PEEL";
+  $("#mini-label").textContent = sid==="press" ? `Pull the squeegee in the gold for perfect registration · ${j.client}` : `Peel the transfer in the gold · ${j.client}`;
+  $("#mzone").style.left = (start*100)+"%"; $("#mzone").style.width = (zoneW*100)+"%";
+  $("#mzone2").style.left = ((start+zoneW*0.3)*100)+"%"; $("#mzone2").style.width = (zoneW*0.4*100)+"%";
+}
+function miniPos(m){ const ph = (m.t / m.period) % 2; return ph < 1 ? ph : 2 - ph; }
+function tapMini(){
+  const m = G && G.mini; if(!m || m.done) return;
+  const p = miniPos(m);
+  const inner0 = m.start + m.w*0.3, inner1 = m.start + m.w*0.7;
+  m.done = true;
+  if(p >= inner0 && p <= inner1){ m.result = "perfect"; SFX.perfect(); $("#mini-label").textContent = "Perfect! Crisp and on register."; }
+  else if(p >= m.start && p <= m.start + m.w){ m.result = "good"; SFX.done(); $("#mini-label").textContent = "Clean print."; }
+  else { m.result = "miss"; SFX.bad(); $("#mini-label").textContent = m.sid==="press" ? "Slightly off register. Still sellable." : "Peeled early. Still sellable."; }
+}
+function resolveMini(j){
+  const m = G.mini;
+  if(m && m.job === j && m.result === "perfect"){ j.perfect = true; G.stats.perfect++; fx(m.sid, "Perfect print!", "meh"); }
+  endMini();
+}
+function endMini(){ G.mini = null; $("#mini").hidden = true; $("#hint").hidden = false; }
+$("#mbtn").addEventListener("pointerdown", e => { e.preventDefault(); tapMini(); });
+$("#mbar").addEventListener("pointerdown", e => { e.preventDefault(); tapMini(); });
+
+/* ------------------------------------------------------------------ fx */
+function fx(sid, text, cls){
+  const el = tiles[sid] && tiles[sid].el; if(!el) return;
+  const d = document.createElement("div");
+  d.className = "fx " + (cls||"");
+  d.textContent = text;
+  d.style.left = (el.offsetLeft + el.offsetWidth/2) + "px";
+  d.style.top = (el.offsetTop + 8) + "px";
+  $("#floor").appendChild(d);
+  setTimeout(() => d.remove(), 1350);
+}
+
+/* ------------------------------------------------------------------ loop */
+let last = 0;
+function loop(now){
+  if(!G || !G.running) return;
+  const dt = Math.min(0.1, (now - last)/1000); last = now;
+  if(!G.paused) tick(dt);
+  render(dt);
+  requestAnimationFrame(loop);
+}
+
+function tick(dt){
+  G.t += dt;
+  const pk = G.perks;
+
+  // new orders
+  if(G.t >= G.nextSpawn && G.t < SHIFT*0.88){
+    if(G.jobs.length < maxTickets()){ G.jobs.push(makeJob()); G.spawned++; SFX.ding(); }
+    const base = Math.max(8, 17 - G.day*0.9) * (pk.rate?0.75:1);
+    G.nextSpawn = G.t + (G.spawned < 2 ? 4 : base*rnd(0.8,1.2));
+  }
+
+  // patience + auto stations
+  for(const j of G.jobs.slice()){
+    j.pat -= dt;
+    if(j.state === "auto"){ j.autoT += dt; if(j.autoT >= j.autoDur){ j.state = "ready"; j.readyT = 0; SFX.ding(); } }
+    else if(j.state === "ready" && j.steps[j.si] === "dryer" && !j.lock){
+      j.readyT += dt;
+      if(!j.scorched && j.readyT > DRYER_WINDOW){ j.scorched = true; G.stats.scorched++; fx("dryer","Scorched!","bad"); SFX.bad(); }
+    }
+    if(j.pat <= 0 && !(j.lock && j.steps[j.si]==="ship")) walkout(j);
+  }
+
+  // player
+  const P = G.P;
+  if(P.task){
+    P.task.t += dt;
+    if(P.task.t >= P.task.dur){ const tk = P.task; P.task = null; finishTask(tk, "player"); }
+  } else if(P.target){
+    const tp = standPoint(P.target);
+    const dx = tp.x - P.x, dy = tp.y - P.y, dist = Math.hypot(dx,dy);
+    const speed = $("#floor").clientWidth * 0.95 * (S.owned.shoes?1.35:1);
+    if(dist <= speed*dt){ P.x = tp.x; P.y = tp.y; P.at = P.target; P.target = null; arrive(P.at); }
+    else { P.x += dx/dist*speed*dt; P.y += dy/dist*speed*dt; if(Math.abs(dx) > 2) P.face = dx < 0 ? -1 : 1; }
+  } else if(P.queue.length){
+    const next = P.queue.shift();
+    if(next === P.at) arrive(next); else P.target = next;
+  }
+
+  // helpers
+  for(const h of G.helpers){
+    if(h.task){
+      h.task.t += dt;
+      if(h.task.t >= h.task.dur){ const tk = h.task; h.task = null; finishTask(tk, "helper"); }
+      continue;
+    }
+    for(const sid of h.stations){
+      if(sid === P.at && P.task && P.task.sid === sid && !ST[sid].auto) continue;
+      const act = findAction(sid, h.only[sid]);
+      if(act){ h.task = startTask("h:"+h.id, sid, act, helperSpeed()); if(h.at !== sid){ h.at = sid; placeHelpers(); } break; }
+    }
+  }
+
+  // mini-game clock
+  if(G.mini && !G.mini.done) G.mini.t += dt;
+
+  if(G.t >= SHIFT) endShift();
+}
+
+function arrive(sid){
+  const act = findAction(sid);
+  if(!act){
+    const busy = G.jobs.some(j => j.steps[j.si]===sid && j.lock);
+    const full = ST[sid].auto && insideCount(sid) >= cap(sid) && G.jobs.some(j=>j.steps[j.si]===sid && j.state==="wait");
+    fx(sid, full ? "Machine is full" : busy ? "Crew has it" : "Nothing to do", "meh");
+    return;
+  }
+  G.P.task = startTask("player", sid, act, playerSpeed(sid));
+  if((sid === "press" || sid === "heat") && act.kind === "work") startMini(act.job, sid);
+}
+
+/* ------------------------------------------------------------------ render */
+const VERB = {
+  sales:(j)=>`approve art for ${j.client}`,
+  recv:(j)=>`count in ${j.qty} ${j.garment}`,
+  screens:(j)=>`burn ${j.colors} screen${j.colors>1?"s":""} for ${j.client}`,
+  press:(j)=>`print ${j.qty} pcs · ${j.colors}-color for ${j.client}`,
+  heat:(j)=>`press transfers for ${j.client}`,
+  finish:(j)=>`fold & bag ${j.qty} for ${j.client}`,
+  ship:(j)=>`ship & invoice ${j.client}`,
+};
+function actText(sid, act){
+  if(sid === "dryer") return act.kind==="unload" ? `pull ${act.job.client} off the dryer` : `lay ${act.job.client} on the dryer`;
+  if(sid === "emb") return act.kind==="unload" ? `unhoop ${act.job.client}` : `hoop & start ${act.job.client}`;
+  return VERB[sid](act.job);
+}
+function statusText(j){
+  const sid = j.steps[j.si], n = ST[sid].name;
+  if(j.state === "auto") return {t:`${sid==="dryer"?"Curing":"Stitching"} · ${Math.ceil(j.autoDur - j.autoT)}s`};
+  if(j.state === "ready") return j.scorched ? {t:"Scorched! Pull it", c:"burn"} : {t:`Ready at ${n}!`, c:"hot"};
+  if(j.lock) return {t:`${n} · working`};
+  return {t:`Next: ${n}`};
+}
+function patColor(f){ return f > .5 ? "var(--ok)" : f > .25 ? "var(--warn)" : "var(--bad)"; }
+
+function render(dt){
+  const P = G.P;
+  avatarEl.style.transform = `translate(${P.x}px,${P.y}px)`;
+  avatarEl.classList.toggle("walk", !!P.target);
+  avatarEl.firstElementChild.style.transform = P.face < 0 ? "scaleX(-1)" : "";
+
+  if(G.mini && !G.mini.done) $("#mmark").style.left = (miniPos(G.mini)*100) + "%";
+
+  G.uiAcc += dt;
+  if(G.uiAcc < 0.08) return;
+  G.uiAcc = 0;
+
+  // HUD
+  const mins = 8*60 + Math.min(1, G.t/SHIFT) * 510;
+  const hh = Math.floor(mins/60), mm = Math.floor(mins%60);
+  $("#g-clock").textContent = `${((hh+11)%12)+1}:${String(mm).padStart(2,"0")} ${hh<12?"AM":"PM"}`;
+  $("#g-rev").textContent = fmt(G.rev);
+  $("#g-gbar").style.width = Math.min(100, G.rev/G.goal*100) + "%";
+
+  // tickets
+  const rail = $("#rail");
+  if(!G.jobs.length){
+    rail.innerHTML = `<span class="none">${G.t < SHIFT*0.88 ? "Waiting on the next order…" : "Last call. No new orders today."}</span>`;
+  } else {
+    rail.innerHTML = G.jobs.map(j => {
+      const st = statusText(j), f = Math.max(0, j.pat/j.patMax);
+      const m = j.method==="sp" ? `SP · ${j.colors}c` : j.method==="emb" ? "EMB" : "HEAT";
+      return `<button class="tk m-${j.method}" data-id="${j.id}">
+        <div class="tk-top"><b>${esc(j.client)}</b><span class="mchip">${m}</span></div>
+        <div class="tk-g">${j.qty} × ${esc(j.garment)}</div>
+        <div class="tk-steps">${j.steps.map((s,i)=>`<i class="${i<j.si?"d":i===j.si?"c":""}"></i>`).join("")}</div>
+        <div class="tk-st ${st.c||""}">${esc(st.t)}</div>
+        <div class="pat"><i style="width:${f*100}%;background:${patColor(f)}"></i></div>
+      </button>`;
+    }).join("");
+  }
+
+  // suggestion
+  let sug = null;
+  for(const sid of ORDER){
+    const a = findAction(sid);
+    if(!a) continue;
+    const covered = G.helpers.some(h => h.stations.includes(sid) && !h.task && (!h.only[sid] || h.only[sid]===a.kind));
+    if(covered) continue;
+    const score = a.job.pat - (a.kind==="unload" && sid==="dryer" ? 60 : 0);
+    if(!sug || score < sug.score) sug = {sid, a, score};
+  }
+
+  // stations
+  for(const sid of ORDER){
+    const T = tiles[sid];
+    const tasks = [];
+    if(P.task && P.task.sid === sid) tasks.push({f:P.task.t/P.task.dur, h:false});
+    for(const h of G.helpers) if(h.task && h.task.sid === sid) tasks.push({f:h.task.t/h.task.dur, h:true});
+    const waiting = G.jobs.filter(j => j.steps[j.si]===sid && j.state==="wait" && !j.lock).length;
+    let html = "";
+    if(ST[sid].auto){
+      const inside = G.jobs.filter(j => j.steps[j.si]===sid && (j.state==="auto"||j.state==="ready"));
+      let slots = "";
+      for(let i=0;i<cap(sid);i++){
+        const j = inside[i];
+        if(!j) slots += `<span class="slot"></span>`;
+        else if(j.state==="ready") slots += `<span class="slot ${j.scorched?"x":"r"}">${j.scorched?"BURNT":"READY"}</span>`;
+        else slots += `<span class="slot f"><i style="width:${Math.min(100,j.autoT/j.autoDur*100)}%"></i><span>${Math.ceil(j.autoDur-j.autoT)}s</span></span>`;
+      }
+      html = `<div class="slots">${slots}</div>`;
+      if(tasks.length) html += tasks.map(t=>`<div class="pbar${t.h?" h":""}"><i style="width:${Math.min(100,t.f*100)}%"></i></div>`).join("");
+      else if(waiting) html += `<span class="wchip">${waiting} waiting</span>`;
+    } else {
+      if(tasks.length) html = tasks.map(t=>`<div class="pbar${t.h?" h":""}"><i style="width:${Math.min(100,t.f*100)}%"></i></div>`).join("");
+      else if(waiting) html = `<span class="wchip">${waiting} waiting</span>`;
+      else html = `<span>${ST[sid].sub}</span>`;
+    }
+    if(html !== T.key){ T.info.innerHTML = html; T.key = html; }
+    const qs = []; P.queue.forEach((q,i) => { if(q===sid) qs.push(i+1); });
+    if(P.target === sid) qs.unshift("→");
+    const qh = qs.map(n=>`<b>${n}</b>`).join("");
+    if(T.qn.innerHTML !== qh) T.qn.innerHTML = qh;
+    T.el.classList.toggle("hint", !!sug && sug.sid === sid && !P.task && !P.target && !P.queue.length);
+  }
+
+  // hint line
+  let hint;
+  if(P.task) hint = `Working at <b>${ST[P.task.sid].name}</b> · ${esc(actText(P.task.sid, {job:P.task.job, kind:P.task.kind}))}`;
+  else if(P.target) hint = `Heading to <b>${ST[P.target].name}</b>${P.queue.length ? " · then " + P.queue.map(q=>ST[q].name).join(", ") : ""}`;
+  else if(sug) hint = `Tap <b>${ST[sug.sid].name}</b> · ${esc(actText(sug.sid, sug.a))}`;
+  else if(G.jobs.length) hint = `Machines are running. Line up your next move.`;
+  else hint = `Floor's clear. The next order is on its way.`;
+  if($("#hint").innerHTML !== hint) $("#hint").innerHTML = hint;
+
+  G.fxAcc += 0.08;
+  if(G.fxAcc > 1){ G.fxAcc = 0; pushPresence(false); }
+}
+
+/* ------------------------------------------------------------------ pause / end */
+function setPaused(p){
+  if(!G || !G.running) return;
+  G.paused = p; $("#pause").hidden = !p;
+  $("#btn-sound").textContent = "Sound: " + (S.muted ? "off" : "on");
+  last = performance.now();
+}
+$("#btn-pause").addEventListener("click", () => setPaused(true));
+$("#btn-resume").addEventListener("click", () => setPaused(false));
+$("#btn-sound").addEventListener("click", () => { S.muted = !S.muted; save(); $("#btn-sound").textContent = "Sound: " + (S.muted ? "off" : "on"); });
+$("#btn-quit").addEventListener("click", () => { $("#pause").hidden = true; endShift(); });
+document.addEventListener("visibilitychange", () => { if(document.hidden && G && G.running && !G.paused) setPaused(true); });
+
+function endShift(){
+  if(!G.running) return;
+  G.running = false; G.paused = false;
+  const rev = Math.round(G.rev), goal = G.goal;
+  const stars = rev >= goal*1.6 ? 3 : rev >= goal*1.3 ? 2 : rev >= goal ? 1 : 0;
+  const day = S.day;
+  S.cash += rev; S.day += 1; save();
+  const rec = {char:S.char, look:cleanLook(lookOf(S.char)), day, revenue:rev, shipped:G.stats.shipped, stars, at:Date.now()};
+  G.lastPost = rec;
+  const t = TEAM_BY[S.char];
+  const msg = stars===3 ? "Record-board shift. Everything out the door." : stars===2 ? "Strong day on the floor." : stars===1 ? "Goal hit. Solid shift." : "Short of goal. Line up moves and keep the dryer clear.";
+  $("#sum").innerHTML = `
+    <h2>Day ${day} · Clocked out</h2>
+    <div class="stars">${STAR(stars>=1)}${STAR(stars>=2)}${STAR(stars>=3)}</div>
+    <div class="big num">${fmt(rev)}<small>earned today · goal ${fmt(goal)}</small></div>
+    <div class="stats num">
+      <div><span>Jobs shipped</span><b>${G.stats.shipped}</b></div>
+      <div><span>Perfect prints</span><b>${G.stats.perfect}</b></div>
+      <div><span>Scorched loads</span><b>${G.stats.scorched}</b></div>
+      <div><span>Cancelled orders</span><b>${G.stats.lost}</b></div>
+    </div>
+    <p class="note">${esc(t.name)}: ${msg} Shop bank is now ${fmt(S.cash)}.</p>`;
+  $("#mini").hidden = true;
+  show("#scr-end");
+  postShift(rec);
+  pushPresence(true);
+}
+
+/* ------------------------------------------------------------------ boot */
+renderTitle();
+renderBoards();
+initCloud();
+})();
+</script>
+</body>
+</html>
